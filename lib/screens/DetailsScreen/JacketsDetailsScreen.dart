@@ -6,23 +6,23 @@ import 'package:provider/provider.dart';
 import '../../models/cart_model.dart';
 import '../../services/api_service.dart';
 
-class DressesDetailsScreens extends StatefulWidget {
+class JacketsDetailsScreens extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String description;
   final String price;
 
-  const DressesDetailsScreens(
+  const JacketsDetailsScreens(
       {super.key,
-      required this.imageUrl,
-      required this.title,
-      required this.description,
-      required this.price});
+        required this.imageUrl,
+        required this.title,
+        required this.description,
+        required this.price});
   @override
-  State<DressesDetailsScreens> createState() => _DressesDetailsScreensState();
+  State<JacketsDetailsScreens> createState() => _JacketsDetailsScreensState();
 }
 
-class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
+class _JacketsDetailsScreensState extends State<JacketsDetailsScreens> {
   String selectedSize = ''; // Initialize with an empty string or a default size
 
   // Add this line
@@ -42,7 +42,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image:
-                      NetworkImage(widget.imageUrl), // Use the passed imageUrl
+                  NetworkImage(widget.imageUrl), // Use the passed imageUrl
                   fit: BoxFit.cover,
                 ),
               ),
@@ -215,7 +215,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                           children: [
                             Row(
                               children:
-                                  ["S", "M", "L", "XL", "XXL"].map((size) {
+                              ["S", "M", "L", "XL", "XXL"].map((size) {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 8),
                                   child: CircularSizeButtons(
@@ -232,7 +232,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                             ),
                             SizedBox(
                                 width:
-                                    20), // Spacing between size buttons and color picker
+                                20), // Spacing between size buttons and color picker
                           ],
                         ),
                       ],
@@ -292,57 +292,57 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                       ],
                     ),
                   ),
-            SizedBox(
-              height: 50,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (selectedSize.isNotEmpty) {
-                    final apiService = ApiService();
-                    await apiService.addCartItem({
-                      'imageUrl': widget.imageUrl,
-                      'title': widget.title,
-                      'price': widget.price,
-                      'selectedSize': selectedSize,
-                      'quantity': 1,
-                    });
+                  SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedSize.isNotEmpty) {
+                          final apiService = ApiService();
+                          await apiService.addCartItem({
+                            'imageUrl': widget.imageUrl,
+                            'title': widget.title,
+                            'price': widget.price,
+                            'selectedSize': selectedSize,
+                            'quantity': 1,
+                          });
 
-                    // Fetch updated cart items
-                    Provider.of<CartModel>(context, listen: false).fetchCartItems();
+                          // Fetch updated cart items
+                          Provider.of<CartModel>(context, listen: false).fetchCartItems();
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Added to cart')),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please select a size')),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  splashFactory: NoSplash.splashFactory,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                        size: 18,
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Added to cart')),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please select a size')),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        splashFactory: NoSplash.splashFactory,
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Add to cart",
-                        style: GoogleFonts.albertSans(
-                            fontSize: 18, color: Colors.white, fontWeight: FontWeight.w700),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.shopping_cart,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Add to cart",
+                              style: GoogleFonts.albertSans(
+                                  fontSize: 18, color: Colors.white, fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            )
+                    ),
+                  )
                 ],
               ),
             ),
@@ -438,13 +438,13 @@ class _ColorPickerState extends State<ColorPicker> {
                   ),
                   child: isSelected
                       ? Icon(
-                          Icons.check,
-                          size: 16,
-                          color: color == Colors.white
-                              ? Colors.black
-                              : Colors
-                                  .white, // Change icon color based on background
-                        )
+                    Icons.check,
+                    size: 16,
+                    color: color == Colors.white
+                        ? Colors.black
+                        : Colors
+                        .white, // Change icon color based on background
+                  )
                       : Container(), // Empty container for non-selected colors
                 ),
               );

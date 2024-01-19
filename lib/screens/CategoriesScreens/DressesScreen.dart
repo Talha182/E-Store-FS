@@ -88,16 +88,16 @@ class DressItem extends StatelessWidget {
 
     return Column(
       children: [
-        _buildImage(imageUrl, name, description),
+        _buildImage(imageUrl, name, description, price),
         _buildInfo(name, description, price),
       ],
     );
   }
 
-  Widget _buildImage(String imageUrl, String name, String description) {
+  Widget _buildImage(String imageUrl, String name, String description, String price) {
     return InkWell(
       onTap: (){
-        Get.to(()=> DressesDetailsScreens(imageUrl: imageUrl, title: name, description: description,));
+        Get.to(()=> DressesDetailsScreens(imageUrl: imageUrl, title: name, description: description, price: price,));
       },
       child: Container(
         width: 160,

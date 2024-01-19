@@ -1,4 +1,6 @@
+import 'package:e_commerce/screens/DetailsScreen/JeansDetailsScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/api_service.dart';
 
@@ -86,29 +88,35 @@ class JeansItem extends StatelessWidget {
 
     return Column(
       children: [
-        _buildImage(imageUrl),
+        _buildImage(imageUrl, name, description,price),
         _buildInfo(name, description, price),
       ],
     );
   }
 
-  Widget _buildImage(String imageUrl) {
-    return Container(
-      width: 160,
-      height: 180,
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
+  Widget _buildImage(String imageUrl,String title, String description, String price) {
+    return InkWell(
+      onTap: (){
+        Get.to(() => JeansDetailsScreens(imageUrl: imageUrl, title: title, description: description, price: price));
+
+      },
+      child: Container(
+        width: 160,
+        height: 180,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(8),
         ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: const Align(
-        alignment: Alignment.topRight,
-        child: IconButton(
-          onPressed: null,
-          icon: Icon(Icons.favorite_outline),
+        child: const Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            onPressed: null,
+            icon: Icon(Icons.favorite_outline),
+          ),
         ),
       ),
     );

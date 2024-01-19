@@ -21,6 +21,8 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
         const jacketsCollection = db.collection('jackets');
         const jeansCollection = db.collection('jeans');
         const shoesCollection = db.collection('shoes');
+        const cartCollection = db.collection('cart');
+
 
         // Route to get dresses
         app.get('/dresses', (req, res) => {
@@ -70,6 +72,32 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
                     res.status(500).send(error);
                 });
         });
+
+            // Route to add an item to the cart
+                app.post('/cart', (req, res) => {
+                    cartCollection.insertOne(req.body)
+                        .then(result => {
+                            res.status(201).send(result);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            res.status(500).send(error);
+                        });
+                });
+
+                // Route to get cart items
+                app.get('/cart', (req, res) => {
+                    cartCollection.find().toArray()
+                        .then(results => {
+                            res.status(200).json(results);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            res.status(500).send(error);
+                        });
+                });
+
+
 
         // Start server
         app.listen(port, () => {
