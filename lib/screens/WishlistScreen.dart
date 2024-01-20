@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../models/cart_model.dart';
 import '../models/wishlist_model.dart'; // Import WishlistModel
 import '../services/api_service.dart'; // Import ApiService
 
@@ -30,42 +31,79 @@ class _WishlistScreenState extends State<WishlistScreen> {
           return wishlistModel.items.isEmpty
               ? const Center(child: Text('No items in the wishlist'))
               : ListView.builder(
-            itemCount: wishlistModel.items.length,
-            itemBuilder: (context, index) {
-              final item = wishlistModel.items[index];
-              return WishlistItemWidget(
-                item: item,
-                onDelete: () async {
-                  try {
-                    await wishlistModel.deleteItem(item.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${item.title} removed from wishlist'),
-                      ),
+                  itemCount: wishlistModel.items.length,
+                  itemBuilder: (context, index) {
+                    final item = wishlistModel.items[index];
+                    return WishlistItemWidget(
+                      item: item,
+                      onDelete: () async {
+                        try {
+                          await wishlistModel.deleteItem(item.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${item.title} removed from wishlist'),
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error removing item'),
+                            ),
+                          );
+                        }
+                      },
+                      onAddToCart: () async {
+                        // Add to Cart Functionality
+                        await addToCart(item);
+                      },
                     );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Error removing item'),
-                      ),
-                    );
-                  }
-                },
-              );
-            },
-          );
+                  },
+                );
         },
       ),
     );
   }
+
+  Future<void> addToCart(WishlistItem item) async {
+    final apiService = ApiService();
+    try {
+      // Set a default size or modify to allow size selection
+      String defaultSize = "M"; // Example default size
+
+      await apiService.addCartItem({
+        'imageUrl': item.imageUrl,
+        'title': item.title,
+        'price': item.price,
+        'selectedSize': defaultSize, // Use the default size
+        'quantity': 1,
+      });
+
+      // Fetch updated cart items
+      Provider.of<CartModel>(context, listen: false).fetchCartItems();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${item.title} added to cart')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding to cart')),
+      );
+    }
+  }
 }
 
-// WishlistItemWidget
 class WishlistItemWidget extends StatelessWidget {
   final WishlistItem item;
   final VoidCallback onDelete;
+  final VoidCallback onAddToCart; // New callback for adding to cart
 
-  const WishlistItemWidget({Key? key, required this.item, required this.onDelete}) : super(key: key);
+  const WishlistItemWidget(
+      {Key? key,
+      required this.item,
+      required this.onDelete,
+      required this.onAddToCart // Initialize onAddToCart
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,57 +133,98 @@ class WishlistItemWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Container(
             width: double.infinity,
-            height: 100,
+            height: 120,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20), color: Colors.white),
             child: Padding(
-              padding: const EdgeInsets.only(top: 5, left: 10, bottom: 5, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding:
+                  const EdgeInsets.only(top: 5, left: 10, bottom: 5, right: 20),
+              child: Stack(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Material(
-                        elevation: 1.0,
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          height: double.infinity,
-                          width: 85,
-                          decoration: BoxDecoration(
+                      Row(
+                        children: [
+                          Material(
+                            elevation: 1.0,
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              item.imageUrl,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.fill,
+                            child: Container(
+                              height: double.infinity,
+                              width: 85,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                  item.imageUrl,
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15, left: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.title,
-                                style: GoogleFonts.albertSans(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
-                            Text(
-                              'Size: ${item.selectedSize}',
-                              style: GoogleFonts.albertSans(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black.withOpacity(0.4)),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15, left: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item.title,
+                                    style: GoogleFonts.albertSans(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                  '${item.description}',
+                                  style: GoogleFonts.albertSans(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black.withOpacity(0.4)),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(item.price,
+                                        style: GoogleFonts.albertSans(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  Positioned(
+                      bottom: 5,
+                      right: 1,
+                      child: SizedBox(
+                        height: 35,
+                        width: 110,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            splashFactory: NoSplash.splashFactory,
+                          ),
+                          onPressed: () {
+                            onAddToCart();
+                          },
+                          child: Text(
+                            "Add to cart",
+                            style: GoogleFonts.albertSans(
+                                fontSize: 11,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ))
                 ],
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/cart_model.dart';
+import '../../models/wishlist_model.dart';
 import '../../services/api_service.dart';
 
 class JacketsDetailsScreens extends StatefulWidget {
@@ -25,6 +26,30 @@ class JacketsDetailsScreens extends StatefulWidget {
 class _JacketsDetailsScreensState extends State<JacketsDetailsScreens> {
   String selectedSize = ''; // Initialize with an empty string or a default size
   bool isFavorite = false;
+
+  Future<void> addToWishlist() async {
+    final apiService = ApiService();
+    try {
+      await apiService.addToWishlist({
+        'imageUrl': widget.imageUrl,
+        'description': widget.description,
+        'title': widget.title,
+        'price': widget.price,
+        'selectedSize': selectedSize,
+      });
+
+      Provider.of<WishlistModel>(context, listen: false).fetchWishlistItems();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Added to wishlist')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding to wishlist')),
+      );
+    }
+  }
+
 
   // Add this line
   @override
@@ -101,6 +126,7 @@ class _JacketsDetailsScreensState extends State<JacketsDetailsScreens> {
                           // handle button press
                           setState(() {
                             isFavorite = !isFavorite; // Toggle the favorite state
+                            addToWishlist();
 
                           });
                         },

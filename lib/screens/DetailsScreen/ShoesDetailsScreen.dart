@@ -33,6 +33,7 @@ class _ShoesDetailsScreensState extends State<ShoesDetailsScreens> {
     try {
       await apiService.addToWishlist({
         'imageUrl': widget.imageUrl,
+        'description': widget.description,
         'title': widget.title,
         'price': widget.price,
         'selectedSize': selectedSize,

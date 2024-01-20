@@ -4,13 +4,15 @@ import '../services/api_service.dart';
 class WishlistItem {
   final String id;
   final String imageUrl;
+  final String description;
   final String title;
   final String price;
   final String selectedSize;
 
-  WishlistItem({
+  WishlistItem( {
     required this.id,
     required this.imageUrl,
+    required this.description,
     required this.title,
     required this.price,
     required this.selectedSize,
@@ -22,7 +24,7 @@ class WishlistItem {
       imageUrl: json['imageUrl'],
       title: json['title'],
       price: json['price'],
-      selectedSize: json['selectedSize'],
+      selectedSize: json['selectedSize'], description: json['description'],
     );
   }
 }

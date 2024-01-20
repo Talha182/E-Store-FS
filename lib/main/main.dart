@@ -6,6 +6,7 @@ import '../models/cart_model.dart';
 import 'app.dart';
 
 void main() {
+  
   runApp(
     MultiProvider(
       providers: [
