@@ -2,18 +2,17 @@ const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const app = express();
 const port = 3000;
 
-// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-// MongoDB connection URL
 const mongoUri = 'mongodb://localhost:27017';
 
-// Connect to MongoDB
 MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(client => {
         const db = client.db('StoreAppDB');
@@ -22,6 +21,7 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
         const jeansCollection = db.collection('jeans');
         const shoesCollection = db.collection('shoes');
         const cartCollection = db.collection('cart');
+        const usersCollection = db.collection('users');
 
 
         // Route to get dresses
@@ -97,11 +97,66 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
                         });
                 });
 
+                app.post('/register', (req, res) => {
+                          const newUser = req.body;
+                          usersCollection.findOne({ $or: [{ username: newUser.username }, { email: newUser.email }] })
+                              .then(user => {
+                                  if (user) {
+                                      if (user.username === newUser.username) {
+                                          res.status(409).json({ error: 'Username already exists' });
+                                      } else if (user.email === newUser.email) {
+                                          res.status(409).json({ error: 'Email already exists' });
+                                      }
+                                  } else {
+                                      bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
+                                          if (err) {
+                                              console.error('Error hashing password: ', err);
+                                              res.status(500).send('Error hashing password');
+                                          } else {
+                                              newUser.password = hash;
+                                              usersCollection.insertOne(newUser)
+                                                  .then(result => {
+                                                      res.status(201).json(result);
+                                                  })
+                                                  .catch(error => {
+                                                      console.error(error);
+                                                      res.status(500).send(error);
+                                                  });
+                                          }
+                                      });
+                                  }
+                              })
+                              .catch(error => {
+                                  console.error(error);
+                                  res.status(500).send(error);
+                              });
+                      });
 
+                      app.post('/login', (req, res) => {
+                          const { email, password } = req.body;
 
-        // Start server
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
-    })
-    .catch(error => console.error(error));
+                          usersCollection.findOne({ email: email })
+                              .then(user => {
+                                  if (user) {
+                                      bcrypt.compare(password, user.password, function(err, result) {
+                                          if (result) {
+                                              res.status(200).json({ message: 'Login successful' });
+                                          } else {
+                                              res.status(401).json({ error: 'Invalid password' });
+                                          }
+                                      });
+                                  } else {
+                                      res.status(404).json({ error: 'User not found' });
+                                  }
+                              })
+                              .catch(error => {
+                                  console.error(error);
+                                  res.status(500).send(error);
+                              });
+                      });
+
+                      app.listen(port, () => {
+                          console.log(`Server running on port ${port}`);
+                      });
+                  })
+                  .catch(error => console.error(error));

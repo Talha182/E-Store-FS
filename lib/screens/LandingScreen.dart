@@ -55,7 +55,7 @@ class _LandingPageState extends State<LandingPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Add login button functionality
-                          Get.to(() => const LoginScreen(),
+                          Get.to(() => LoginScreen(),
                               transition: Transition.fade,
                               duration: const Duration(milliseconds: 200));                        },
                         style: ElevatedButton.styleFrom(
@@ -78,7 +78,7 @@ class _LandingPageState extends State<LandingPage> {
                     width: screenWidth - 60,
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.to(() => const SignUpScreen(),
+                        Get.to(() => SignUpScreen(),
                             transition: Transition.fade,
                             duration: const Duration(milliseconds: 200));                      },
                       style: ElevatedButton.styleFrom(

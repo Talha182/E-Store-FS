@@ -2,6 +2,7 @@ import 'package:e_commerce/Custom_Widgets/Navbar.dart';
 import 'package:e_commerce/screens/LandingScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/LoginScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/SignUpScreen.dart';
+import 'package:e_commerce/screens/PaymentScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/breakpoint.dart';

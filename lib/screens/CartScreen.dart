@@ -11,7 +11,17 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Fetch cart items when the screen is initialized
+    final cartModel = Provider.of<CartModel>(context, listen: false);
+    cartModel.fetchCartItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    CartModel cartModel = Provider.of<CartModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Cart'),
@@ -24,23 +34,111 @@ class _CartScreenState extends State<CartScreen> {
                 return cartModel.items.isEmpty
                     ? Center(child: Text('No items in the cart'))
                     : ListView.builder(
-                  itemCount: cartModel.items.length,
-                  itemBuilder: (context, index) {
-                    return CartItemWidget(item: cartModel.items[index]);
-                  },
-                );
+                        itemCount: cartModel.items.length,
+                        itemBuilder: (context, index) {
+                          return CartItemWidget(item: cartModel.items[index]);
+                        },
+                      );
               },
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            padding: EdgeInsets.all(10),
-            child: ElevatedButton(
-              child: Text('Proceed to Checkout'),
-              onPressed: () {
-                // TODO: Add your checkout logic here
-              },
+          Padding(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: Container(
+              width: double.infinity,
+              height: 140,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.black.withOpacity(0.2))),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('SubTotal:',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                        Text('\$${cartModel.getTotalAmount()}',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ],
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Shipping:',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                        Text('\$${cartModel.getShippingAmount()}',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ],
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('BagTotal:',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                        Text(
+                            '(${cartModel.items.length} items) \$${cartModel.getFinalAmount()}',
+                            style: GoogleFonts.albertSans(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Container(
+          //   padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text('Subtotal: \$${cartModel.getTotalAmount()}',
+          //           style: GoogleFonts.albertSans(
+          //               fontWeight: FontWeight.w500, fontSize: 16)),
+          //       SizedBox(height: 5),
+          //       Text('Shipping: \$${cartModel.getShippingAmount()}',
+          //           style: GoogleFonts.albertSans(
+          //               fontWeight: FontWeight.w500, fontSize: 16)),
+          //       SizedBox(height: 5),
+          //       Text(
+          //           'Total: (${cartModel.items.length} items) \$${cartModel.getFinalAmount()}',
+          //           style: GoogleFonts.albertSans(
+          //               fontWeight: FontWeight.bold, fontSize: 18)),
+          //     ],
+          //   ),
+          // ),
+          SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  backgroundColor: Colors.black,
+                  splashFactory: NoSplash.splashFactory,
+                ),
+                child: Text('Proceed to Checkout',
+                    style: GoogleFonts.albertSans(
+                        color: Colors.white, fontWeight: FontWeight.w600)),
+                onPressed: () {
+                  // TODO: Add your checkout logic here
+                },
+              ),
             ),
           ),
         ],
@@ -48,7 +146,6 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
-
 
 class CartItemWidget extends StatelessWidget {
   final CartItem item;
@@ -58,7 +155,7 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
+      padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 12),
       child: Material(
         elevation: 4.0,
         borderRadius: BorderRadius.circular(20),
@@ -138,4 +235,3 @@ class CartItemWidget extends StatelessWidget {
     );
   }
 }
-

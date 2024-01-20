@@ -7,9 +7,12 @@ import 'app.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => CartModel(),
+      create: (context) {
+        CartModel cartModel = CartModel();
+        cartModel.fetchCartItems(); // Fetch cart items when the app starts
+        return cartModel;
+      },
       child: const MyApp(),
     ),
   );
 }
-

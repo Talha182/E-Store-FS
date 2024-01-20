@@ -49,4 +49,21 @@ class CartModel extends ChangeNotifier {
       print('Error fetching cart items: $e');
     }
   }
+  double getTotalAmount() {
+    return _items.fold(0, (total, current) {
+      // Remove the dollar sign and then parse
+      String priceWithoutDollar = current.price.replaceAll('\$', '');
+      return total + double.parse(priceWithoutDollar);
+    });
+  }
+
+  double getShippingAmount() {
+    // Implement your logic to calculate shipping
+    return 10.0; // This is a placeholder
+  }
+
+  double getFinalAmount() {
+    return getTotalAmount() + getShippingAmount();
+  }
 }
+

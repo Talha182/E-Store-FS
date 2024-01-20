@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:e_commerce/Custom_Widgets/Navbar.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -98,4 +100,43 @@ class ApiService {
       throw Exception('Error loading cart items: $e');
     }
   }
+
+  Future<void> registerUser(Map<String, dynamic> userData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(userData),
+      );
+      if (response.statusCode == 201) {
+        print('User registered successfully');
+      } else {
+        throw Exception('Failed to register user');
+      }
+    } catch (e) {
+      print('Error registering user: $e');
+      throw Exception('Error registering user: $e');
+    }
+  }
+  Future<void> loginUser(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'email': email, 'password': password}),
+      );
+
+      if (response.statusCode == 200) {
+        print('Login successful');
+        // You can also handle navigation or state management here if needed
+      } else {
+        print('Failed to login');
+        throw Exception('Failed to login');
+      }
+    } catch (e) {
+      print('Error logging in: $e');
+      throw Exception('Error logging in: $e');
+    }
+  }
+
 }
