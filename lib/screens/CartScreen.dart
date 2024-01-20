@@ -24,7 +24,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping Cart'),
+        title: const Text('Shopping Cart'),
       ),
       body: Column(
         children: [
@@ -32,7 +32,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Consumer<CartModel>(
               builder: (context, cartModel, child) {
                 return cartModel.items.isEmpty
-                    ? Center(child: Text('No items in the cart'))
+                    ? const Center(child: Text('No items in the cart'))
                     : ListView.builder(
                         itemCount: cartModel.items.length,
                         itemBuilder: (context, index) {
@@ -43,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Container(
               width: double.infinity,
               height: 140,
@@ -51,7 +51,7 @@ class _CartScreenState extends State<CartScreen> {
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: Colors.black.withOpacity(0.2))),
               child: Padding(
-                padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,7 +66,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold, fontSize: 20)),
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -78,7 +78,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold, fontSize: 20)),
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -96,31 +96,11 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
           ),
-          // Container(
-          //   padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text('Subtotal: \$${cartModel.getTotalAmount()}',
-          //           style: GoogleFonts.albertSans(
-          //               fontWeight: FontWeight.w500, fontSize: 16)),
-          //       SizedBox(height: 5),
-          //       Text('Shipping: \$${cartModel.getShippingAmount()}',
-          //           style: GoogleFonts.albertSans(
-          //               fontWeight: FontWeight.w500, fontSize: 16)),
-          //       SizedBox(height: 5),
-          //       Text(
-          //           'Total: (${cartModel.items.length} items) \$${cartModel.getFinalAmount()}',
-          //           style: GoogleFonts.albertSans(
-          //               fontWeight: FontWeight.bold, fontSize: 18)),
-          //     ],
-          //   ),
-          // ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
             child: SizedBox(
               width: double.infinity,
               height: 50,
@@ -155,83 +135,119 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 12),
-      child: Material(
-        elevation: 4.0,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          width: double.infinity,
-          height: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20), color: Colors.white),
-          child: Padding(
-            padding: EdgeInsets.only(top: 5, left: 10, bottom: 5, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Material(
-                      elevation: 1.0,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: double.infinity,
-                        width: 85,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              20), // This line adds the border radius to the image
-                          child: Image.network(
-                            item.imageUrl,
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15, left: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item.title,
-                              style: GoogleFonts.albertSans(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          Text(
-                            'Size: ${item.selectedSize}',
-                            style: GoogleFonts.albertSans(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black.withOpacity(0.4)),
-                          ),
-                          Text(
-                            'Quantity: ${item.quantity}',
-                            style: GoogleFonts.albertSans(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black.withOpacity(0.4)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${item.price}',
-                      style: GoogleFonts.albertSans(
-                          fontWeight: FontWeight.bold, fontSize: 25),
-                    ),
-                  ],
-                )
-              ],
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 12),
+        child: Dismissible(
+          key: Key(item.id), // Assuming each item has a unique 'id'
+          direction: DismissDirection.endToStart, // Swipe from right to left
+          background: Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(20)
+            ),
+            child: const Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Icon(Icons.delete, color: Colors.white),
+                  SizedBox(width: 20),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+          onDismissed: (direction) async {
+            try {
+              await Provider.of<CartModel>(context, listen: false)
+                  .deleteItem(item.id); // Add deleteItem method in CartModel
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Item removed from cart'),
+              ));
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Error removing item'),
+              ));
+            }
+          },
+
+
+          child: Material(
+            elevation: 4.0,
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: double.infinity,
+              height: 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), color: Colors.white),
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 5, left: 10, bottom: 5, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Material(
+                          elevation: 1.0,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: double.infinity,
+                            width: 85,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  20), // This line adds the border radius to the image
+                              child: Image.network(
+                                item.imageUrl,
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, left: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item.title,
+                                  style: GoogleFonts.albertSans(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                'Size: ${item.selectedSize}',
+                                style: GoogleFonts.albertSans(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black.withOpacity(0.4)),
+                              ),
+                              Text(
+                                'Quantity: ${item.quantity}',
+                                style: GoogleFonts.albertSans(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black.withOpacity(0.4)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '${item.price}',
+                          style: GoogleFonts.albertSans(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }

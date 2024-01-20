@@ -101,6 +101,21 @@ class ApiService {
     }
   }
 
+  Future<void> deleteCartItem(String id) async {
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl/cart/$id'));
+      if (response.statusCode != 200) {
+        print('Failed to delete cart item. Status code: ${response.statusCode}');
+        return; // Return without throwing a new exception
+      }
+    } catch (e) {
+      print('Error deleting cart item: $e');
+      return; // Return without throwing a new exception
+    }
+  }
+
+
+
   Future<void> registerUser(Map<String, dynamic> userData) async {
     try {
       final response = await http.post(
@@ -116,26 +131,6 @@ class ApiService {
     } catch (e) {
       print('Error registering user: $e');
       throw Exception('Error registering user: $e');
-    }
-  }
-  Future<void> loginUser(String email, String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'email': email, 'password': password}),
-      );
-
-      if (response.statusCode == 200) {
-        print('Login successful');
-        // You can also handle navigation or state management here if needed
-      } else {
-        print('Failed to login');
-        throw Exception('Failed to login');
-      }
-    } catch (e) {
-      print('Error logging in: $e');
-      throw Exception('Error logging in: $e');
     }
   }
 

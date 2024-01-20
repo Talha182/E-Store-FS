@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const { ObjectId } = require('mongodb');
 
 const app = express();
 const port = 3000;
@@ -96,6 +97,29 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
                             res.status(500).send(error);
                         });
                 });
+
+              // Route to delete a cart item
+              app.delete('/cart/:id', (req, res) => {
+                const { id } = req.params;
+                // Use ObjectId to create an ObjectId instance from the provided id
+                const cartItemId = new ObjectId(id);
+
+                cartCollection.deleteOne({ _id: cartItemId })
+                  .then(result => {
+                    if (result.deletedCount === 0) {
+                      return res.status(404).send('Item not found');
+                    }
+                    res.status(200).send('Item deleted');
+                  })
+                  .catch(error => {
+                    console.error(error);
+                    res.status(500).send(error);
+                  });
+              });
+
+
+
+
 
                 app.post('/register', (req, res) => {
                           const newUser = req.body;
