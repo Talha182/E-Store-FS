@@ -143,6 +143,24 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
                   });
               });
 
+               // Route to delete a wishlist item
+                          app.delete('/wishlist/:id', (req, res) => {
+                              const { id } = req.params;
+                              const wishlistItemId = new ObjectId(id);
+
+                              wishlistCollection.deleteOne({ _id: wishlistItemId })
+                                  .then(result => {
+                                      if (result.deletedCount === 0) {
+                                          return res.status(404).send('Item not found');
+                                      }
+                                      res.status(200).send('Item deleted');
+                                  })
+                                  .catch(error => {
+                                      console.error(error);
+                                      res.status(500).send(error);
+                                  });
+                          });
+
 
 
 

@@ -1,3 +1,4 @@
+import 'package:e_commerce/models/wishlist_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,6 +37,9 @@ class _ShoesDetailsScreensState extends State<ShoesDetailsScreens> {
         'price': widget.price,
         'selectedSize': selectedSize,
       });
+
+      Provider.of<WishlistModel>(context, listen: false).fetchWishlistItems();
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Added to wishlist')),
       );
