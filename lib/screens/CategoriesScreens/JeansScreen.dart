@@ -70,7 +70,7 @@ class _JeansScreenState extends State<JeansScreen> {
   }
 }
 
-class JeansItem extends StatelessWidget {
+class JeansItem extends StatefulWidget {
   final Map<String, dynamic> dress;
 
   const JeansItem({
@@ -79,12 +79,19 @@ class JeansItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<JeansItem> createState() => _JeansItemState();
+}
+
+class _JeansItemState extends State<JeansItem> {
+  bool isFavorite = false;
+
+  @override
   Widget build(BuildContext context) {
     // Default values for potentially null fields
-    String name = dress['name'] ?? 'Unknown Name';
-    String description = dress['description'] ?? 'No description';
-    String price = dress['price'] ?? 'N/A';
-    String imageUrl = dress['image'] ?? 'https://via.placeholder.com/160';
+    String name = widget.dress['name'] ?? 'Unknown Name';
+    String description = widget.dress['description'] ?? 'No description';
+    String price = widget.dress['price'] ?? 'N/A';
+    String imageUrl = widget.dress['image'] ?? 'https://via.placeholder.com/160';
 
     return Column(
       children: [
@@ -111,11 +118,19 @@ class JeansItem extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Align(
+        child: Align(
           alignment: Alignment.topRight,
           child: IconButton(
-            onPressed: null,
-            icon: Icon(Icons.favorite_outline),
+            onPressed: () {
+              setState(() {
+                isFavorite = !isFavorite; // Toggle the favorite state
+              });
+            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color:
+              isFavorite ? Colors.red : Colors.black, // Toggle icon color
+            ),
           ),
         ),
       ),

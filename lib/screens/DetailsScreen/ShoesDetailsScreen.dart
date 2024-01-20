@@ -24,6 +24,27 @@ class ShoesDetailsScreens extends StatefulWidget {
 
 class _ShoesDetailsScreensState extends State<ShoesDetailsScreens> {
   String selectedSize = ''; // Initialize with an empty string or a default size
+  bool isFavorite = false;
+
+
+  Future<void> addToWishlist() async {
+    final apiService = ApiService();
+    try {
+      await apiService.addToWishlist({
+        'imageUrl': widget.imageUrl,
+        'title': widget.title,
+        'price': widget.price,
+        'selectedSize': selectedSize,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Added to wishlist')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding to wishlist')),
+      );
+    }
+  }
 
   // Add this line
   @override
@@ -93,26 +114,34 @@ class _ShoesDetailsScreensState extends State<ShoesDetailsScreens> {
                       ],
                     ),
                     Positioned(
-                      bottom: 30,
-                      right: 1,
-                      child: InkWell(
-                        onTap: () {
-                          // handle button press
-                        },
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
+                        bottom: 30,
+                        right: 1,
+                        child: InkWell(
+                          onTap: () {
+
+                            // handle button press
+                            setState(() {
+                              isFavorite = !isFavorite; // Toggle the favorite state
+                              addToWishlist();
+
+
+
+                            });
+                          },
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration:  BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child:  Icon(
+                              isFavorite ? Icons.favorite : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.black,
+                              size: 20,// Toggle icon color
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.favorite_outline,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                        ),
-                      ),
+                        )
                     )
                   ],
                 ),

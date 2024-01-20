@@ -70,7 +70,7 @@ class _JacketsScreenState extends State<JacketsScreen> {
   }
 }
 
-class JacketsItem extends StatelessWidget {
+class JacketsItem extends StatefulWidget {
   final Map<String, dynamic> jackets;
 
   const JacketsItem({
@@ -79,12 +79,19 @@ class JacketsItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<JacketsItem> createState() => _JacketsItemState();
+}
+
+class _JacketsItemState extends State<JacketsItem> {
+  bool isFavorite = false;
+
+  @override
   Widget build(BuildContext context) {
     // Default values for potentially null fields
-    String name = jackets['name'] ?? 'Unknown Name';
-    String description = jackets['description'] ?? 'No description';
-    String price = jackets['price'] ?? 'N/A';
-    String imageUrl = jackets['image'] ?? 'https://via.placeholder.com/160';
+    String name = widget.jackets['name'] ?? 'Unknown Name';
+    String description = widget.jackets['description'] ?? 'No description';
+    String price = widget.jackets['price'] ?? 'N/A';
+    String imageUrl = widget.jackets['image'] ?? 'https://via.placeholder.com/160';
 
     return Column(
       children: [
@@ -110,11 +117,19 @@ class JacketsItem extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Align(
+        child:  Align(
           alignment: Alignment.topRight,
           child: IconButton(
-            onPressed: null,
-            icon: Icon(Icons.favorite_outline),
+            onPressed: () {
+              setState(() {
+                isFavorite = !isFavorite; // Toggle the favorite state
+              });
+            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color:
+              isFavorite ? Colors.red : Colors.black, // Toggle icon color
+            ),
           ),
         ),
       ),

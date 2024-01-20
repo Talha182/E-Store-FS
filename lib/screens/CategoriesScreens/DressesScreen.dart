@@ -13,11 +13,13 @@ class DressesScreen extends StatefulWidget {
 
 class _DressesScreenState extends State<DressesScreen> {
   late Future<List<dynamic>> _dressesFuture;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
-    _dressesFuture = ApiService().getDresses(); // Fetch dresses data asynchronously
+    _dressesFuture =
+        ApiService().getDresses(); // Fetch dresses data asynchronously
   }
 
   @override
@@ -58,9 +60,9 @@ class _DressesScreenState extends State<DressesScreen> {
             Expanded(
               child: isRightItemPresent
                   ? Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: DressItem(dress: dresses[rightIndex]),
-              )
+                      padding: const EdgeInsets.only(top: 20),
+                      child: DressItem(dress: dresses[rightIndex]),
+                    )
                   : Container(), // Empty container to maintain alignment
             ),
           ],
@@ -70,7 +72,7 @@ class _DressesScreenState extends State<DressesScreen> {
   }
 }
 
-class DressItem extends StatelessWidget {
+class DressItem extends StatefulWidget {
   final Map<String, dynamic> dress;
 
   const DressItem({
@@ -79,12 +81,20 @@ class DressItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DressItem> createState() => _DressItemState();
+}
+
+class _DressItemState extends State<DressItem> {
+  bool isFavorite = false;
+
+  @override
   Widget build(BuildContext context) {
     // Default values for potentially null fields
-    String name = dress['name'] ?? 'Unknown Name';
-    String description = dress['description'] ?? 'No description';
-    String price = dress['price'] ?? 'N/A';
-    String imageUrl = dress['image'] ?? 'https://via.placeholder.com/160';
+    String name = widget.dress['name'] ?? 'Unknown Name';
+    String description = widget.dress['description'] ?? 'No description';
+    String price = widget.dress['price'] ?? 'N/A';
+    String imageUrl =
+        widget.dress['image'] ?? 'https://via.placeholder.com/160';
 
     return Column(
       children: [
@@ -94,10 +104,16 @@ class DressItem extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(String imageUrl, String name, String description, String price) {
+  Widget _buildImage(
+      String imageUrl, String name, String description, String price) {
     return InkWell(
-      onTap: (){
-        Get.to(()=> DressesDetailsScreens(imageUrl: imageUrl, title: name, description: description, price: price,));
+      onTap: () {
+        Get.to(() => DressesDetailsScreens(
+              imageUrl: imageUrl,
+              title: name,
+              description: description,
+              price: price,
+            ));
       },
       child: Container(
         width: 160,
@@ -110,11 +126,19 @@ class DressItem extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Align(
+        child: Align(
           alignment: Alignment.topRight,
           child: IconButton(
-            onPressed: null,
-            icon: Icon(Icons.favorite_outline),
+            onPressed: () {
+              setState(() {
+                isFavorite = !isFavorite; // Toggle the favorite state
+              });
+            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color:
+                  isFavorite ? Colors.red : Colors.black, // Toggle icon color
+            ),
           ),
         ),
       ),
@@ -127,9 +151,11 @@ class DressItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(name, style: GoogleFonts.albertSans(fontWeight: FontWeight.bold)),
+          Text(name,
+              style: GoogleFonts.albertSans(fontWeight: FontWeight.bold)),
           Text(description),
-          Text(price, style: GoogleFonts.albertSans(fontWeight: FontWeight.bold)),
+          Text(price,
+              style: GoogleFonts.albertSans(fontWeight: FontWeight.bold)),
         ],
       ),
     );

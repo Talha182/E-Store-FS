@@ -1,3 +1,4 @@
+import 'package:e_commerce/screens/WishlistScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -25,7 +26,7 @@ class _NavbarState extends State<Navbar> {
           children: [
             HomeScreen(),
             CartScreen(),
-            NotificationScreen(),
+            WishlistScreen(),
             ProfileScreen(),
           ],
         ),

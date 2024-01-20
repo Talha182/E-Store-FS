@@ -115,6 +115,49 @@ class ApiService {
   }
 
 
+  Future<void> addToWishlist(Map<String, dynamic> wishlistItem) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/wishlist'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(wishlistItem),
+      );
+      if (response.statusCode == 201) {
+        print('Item added to wishlist successfully');
+      } else {
+        throw Exception('Failed to add item to wishlist');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Error adding item to wishlist: $e');
+    }
+  }
+
+  Future<List<dynamic>> getWishlistItems() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/wishlist'));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to load wishlist items');
+      }
+    } catch (e) {
+      throw Exception('Error loading wishlist items: $e');
+    }
+  }
+
+  Future<void> deleteWishlistItem(String id) async {
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl/wishlist/$id'));
+      if (response.statusCode != 200) {
+        print('Failed to delete wishlist item. Status code: ${response.statusCode}');
+        return; // Return without throwing a new exception
+      }
+    } catch (e) {
+      print('Error deleting wishlist item: $e');
+      return; // Return without throwing a new exception
+    }
+  }
 
   Future<void> registerUser(Map<String, dynamic> userData) async {
     try {

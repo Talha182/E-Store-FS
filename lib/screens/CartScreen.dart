@@ -18,6 +18,8 @@ class _CartScreenState extends State<CartScreen> {
     cartModel.fetchCartItems();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     CartModel cartModel = Provider.of<CartModel>(context);

@@ -24,6 +24,7 @@ class JeansDetailsScreens extends StatefulWidget {
 
 class _JeansDetailsScreensState extends State<JeansDetailsScreens> {
   String selectedSize = ''; // Initialize with an empty string or a default size
+  bool isFavorite = false;
 
   // Add this line
   @override
@@ -98,6 +99,10 @@ class _JeansDetailsScreensState extends State<JeansDetailsScreens> {
                       child: InkWell(
                         onTap: () {
                           // handle button press
+                          setState(() {
+                            isFavorite = !isFavorite; // Toggle the favorite state
+
+                          });
                         },
                         child: Container(
                           width: 36,
@@ -106,10 +111,10 @@ class _JeansDetailsScreensState extends State<JeansDetailsScreens> {
                             shape: BoxShape.circle,
                             color: Colors.white,
                           ),
-                          child: const Icon(
-                            Icons.favorite_outline,
-                            color: Colors.black,
-                            size: 20,
+                          child:  Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : Colors.black,
+                            size: 20,// Toggle icon color
                           ),
                         ),
                       ),

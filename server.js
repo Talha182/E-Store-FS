@@ -23,6 +23,7 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
         const shoesCollection = db.collection('shoes');
         const cartCollection = db.collection('cart');
         const usersCollection = db.collection('users');
+        const wishlistCollection = db.collection('wishlist');
 
 
         // Route to get dresses
@@ -110,6 +111,31 @@ MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true 
                       return res.status(404).send('Item not found');
                     }
                     res.status(200).send('Item deleted');
+                  })
+                  .catch(error => {
+                    console.error(error);
+                    res.status(500).send(error);
+                  });
+              });
+
+
+              // Route to add an item to the wishlist
+              app.post('/wishlist', (req, res) => {
+                wishlistCollection.insertOne(req.body)
+                  .then(result => {
+                    res.status(201).send(result);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                    res.status(500).send(error);
+                  });
+              });
+
+              // Route to get wishlist items
+              app.get('/wishlist', (req, res) => {
+                wishlistCollection.find().toArray()
+                  .then(results => {
+                    res.status(200).json(results);
                   })
                   .catch(error => {
                     console.error(error);
