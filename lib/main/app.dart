@@ -1,22 +1,42 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:e_commerce/Custom_Widgets/Navbar.dart';
+import 'package:e_commerce/notifcation_controller.dart';
 import 'package:e_commerce/screens/LandingScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/LoginScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/SignUpScreen.dart';
 import 'package:e_commerce/screens/PaymentScreen.dart';
+import 'package:e_commerce/screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:responsive_framework/breakpoint.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'main.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod,
+      onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod
+
+    );
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-
-     debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,
         breakpoints: [
@@ -26,7 +46,7 @@ class MyApp extends StatelessWidget {
           const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
         ],
       ),
-      home: Navbar  (),
+      home: ProfileScreen(),
     );
   }
 }
