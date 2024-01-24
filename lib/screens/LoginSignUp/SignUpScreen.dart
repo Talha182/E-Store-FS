@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:e_commerce/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController userNameController = TextEditingController();
@@ -21,20 +23,19 @@ class SignUpScreen extends StatelessWidget {
 
 
   Future<void> registerUser() async {
-    // Trigger email validation
     _validateEmail.value = true;
 
     final String userName = userNameController.text;
     final String email = emailController.text;
     final String password = passwordController.text;
 
-    if (userName.isEmpty || email.isEmpty || password.isEmpty ) {
+    if (userName.isEmpty || email.isEmpty || password.isEmpty) {
       Get.snackbar('Error', 'Please fill in all fields');
       return;
     }
     if (!isEmailValid(email)) {
       Get.snackbar('Error', 'Please enter a valid email address');
-      return; // Stop the registration process if email is invalid
+      return;
     }
 
     // API request to register user
@@ -52,20 +53,21 @@ class SignUpScreen extends StatelessWidget {
       );
 
       if (response.statusCode == 201) {
+        // Save username to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('username', userName);
         Get.snackbar('Success', 'User registered successfully');
+        Get.to(() => Navbar());
         clearText(); // Clear the text fields only on successful registration
-        Get.to(() => Navbar()); // Navigate to the next screen
+        // Navigate to the next screen or login page as necessary
       } else if (response.statusCode == 409) {
         final responseBody = json.decode(response.body);
         Get.snackbar('Error', responseBody['error']);
-        // Do not clear text fields here, as registration was not successful
       } else {
         Get.snackbar('Error', 'Failed to register user');
-        // Do not clear text fields here either
       }
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred');
-      // Do not clear text fields in case of an error
+      Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 

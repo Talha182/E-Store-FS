@@ -41,11 +41,11 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
       Provider.of<WishlistModel>(context, listen: false).fetchWishlistItems();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Added to wishlist')),
+        const SnackBar(content: Text('Added to wishlist')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error adding to wishlist')),
+        const SnackBar(content: Text('Error adding to wishlist')),
       );
     }
   }
@@ -132,7 +132,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                         child: Container(
                           width: 36,
                           height: 36,
-                          decoration:  BoxDecoration(
+                          decoration:  const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white,
                           ),
@@ -184,7 +184,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                               color: Colors.black.withOpacity(0.5),
                               fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
@@ -200,13 +200,13 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                                   direction: Axis.horizontal,
                                   allowHalfRating: false,
                                   itemCount: 5,
-                                  itemBuilder: (context, _) => Icon(
+                                  itemBuilder: (context, _) => const Icon(
                                     Icons.star,
                                     color: Colors.amber,
                                   ),
                                   onRatingUpdate: (double value) {},
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Text(
@@ -225,7 +225,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
@@ -233,7 +233,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                           style: GoogleFonts.albertSans(
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -246,7 +246,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                               children:
                                   ["S", "M", "L", "XL", "XXL"].map((size) {
                                 return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                   child: CircularSizeButtons(
                                     size: size,
                                     isSelected: selectedSize == size,
@@ -259,7 +259,7 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                                 );
                               }).toList(),
                             ),
-                            SizedBox(
+                            const SizedBox(
                                 width:
                                     20), // Spacing between size buttons and color picker
                           ],
@@ -340,11 +340,11 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                     Provider.of<CartModel>(context, listen: false).fetchCartItems();
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Added to cart')),
+                      const SnackBar(content: Text('Added to cart')),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please select a size')),
+                      const SnackBar(content: Text('Please select a size')),
                     );
                   }
                 },
@@ -353,15 +353,15 @@ class _DressesDetailsScreensState extends State<DressesDetailsScreens> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.shopping_cart,
                         color: Colors.white,
                         size: 18,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
                         "Add to cart",
                         style: GoogleFonts.albertSans(
@@ -445,7 +445,7 @@ class _ColorPickerState extends State<ColorPicker> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
           child: Column(
             children: widget.colors.map((color) {
               bool isSelected = color == selectedColor;
@@ -459,7 +459,7 @@ class _ColorPickerState extends State<ColorPicker> {
                 child: Container(
                   width: 20,
                   height: 20,
-                  margin: EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
                     color: color,
                     shape: BoxShape.circle,
@@ -521,12 +521,12 @@ class _NumberOfProductsContainerState extends State<NumberOfProductsContainer> {
         mainAxisSize: MainAxisSize.min, // To keep the container size to minimum
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.remove),
+            icon: const Icon(Icons.remove),
             onPressed: _decrement,
           ),
-          Text('$count', style: TextStyle(fontSize: 20)),
+          Text('$count', style: const TextStyle(fontSize: 20)),
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: _increment,
           ),
         ],

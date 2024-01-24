@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:e_commerce/Custom_Widgets/Navbar.dart';
 import 'package:e_commerce/notifcation_controller.dart';
+import 'package:e_commerce/screens/EditProfileScreen.dart';
 import 'package:e_commerce/screens/LandingScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/LoginScreen.dart';
 import 'package:e_commerce/screens/LoginSignUp/SignUpScreen.dart';
@@ -9,7 +10,6 @@ import 'package:e_commerce/screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'main.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
           const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
         ],
       ),
-      home: ProfileScreen(),
+      home: LoginScreen(),
     );
   }
 }
